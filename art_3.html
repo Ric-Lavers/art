@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<script>
+		var firstSymbol = Symbol('stepOne')
+
+	</script>
+
+	<title>Art</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+	<script src="main.js"></script> -->
+	<style>
+		svg {
+			width: 450px;height:450px;
+			stroke: lime;
+			fill: none;
+			stroke-width: 2px;
+		}
+		body {
+			background-color: #122
+		}
+	</style>
+</head>
+<body>
+		<svg id="aeonKNight" viewBox="-200 -200 400 400">
+<!-- 	0,0     0,200  0,0    0,-200
+			0,0      -->			<polyline id="KN_poly" points= "
+	50,0   0,150 -50,0
+		0,-150  50,0   100,0  0,100
+		-100,0  0,-100 100,0  150,0
+		0,50   -150,0  0,-50  150,0"  
+													<!-- 200,0
+		0,0    -200,0  0,0    200,0`" -->
+								 />
+								 <line x1="0"y1="0" x2="0"y2="200" />
+		</svg>
+		<script>aeonKNight = document.getElementById("aeonKNight")</script>
+		<script>
+			function appendStyle(createTextNode) {
+				let style = document.createElement("style");
+				style.appendChild(document.createTextNode(createTextNode));
+				document.head.appendChild(style);
+				return style.sheet;
+		};
+		</script>
+		<script>
+			points = {[firstSymbol]: Array.from(document.getElementById("KN_poly").points)}
+			
+		</script>
+		<script>
+			kn = document.getElementById("KN_poly")
+			p  = kn.points
+			l  = p.length
+			ptl = kn.getTotalLength()
+			// void appendStyle(`svg { background-color: black; opacity: 0.6;stroke-dasharray: ${ptl}; stroke-dashoffset: ${ptl/l};}`)
+			function shift() {
+				np = Array.from(points[firstSymbol])
+				let wow = np.splice(i%l,l).concat(np).reduce((a,{x,y}) => a.concat([x,y]), [] )
+
+				document.getElementById("KN_poly").setAttribute('points', wow.splice(0, (l*2)).toString())
+			}
+			
+
+
+			i = 0
+			spins=1 * l
+			duration = {ms: 500}
+			function up(fn){ if(i>=spins ){i=0} /* console.log(duration.ms); */ i++;  fn(); setTimeout(() => up(fn), duration.ms) }
+			up(shift)
+
+		</script>
+</body>
+</html>

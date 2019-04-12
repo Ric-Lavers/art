@@ -1,0 +1,53 @@
+#drawPolyline__main-path {
+	stroke-width: 6.75px;
+	stroke: bisque;
+	/* fill: beige; */
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	
+	/* animation: dash 13.71s infinite alternate; */
+	stroke-dasharray: 49px;
+	/* animation: width 4s infinite linear; */
+	animation: dash 16s infinite linear;
+}
+#drawPolyline__main-extentions {
+	stroke-dasharray: 49px;
+	/* animation: dash 80s infinite linear; */
+	/* cubic-bezier(.77,.21,.29,1.02); */
+}
+
+@keyframes dash {
+	0% {
+		/* opacity: 0.1; */
+		/* stroke-dasharray: 49px; */
+		stroke-dashoffset: 49px;
+	}
+	90% {
+		/* opacity: 0.7; */
+		stroke-dashoffset: 0px;
+	}
+	91% {
+		/* stroke-dasharray: 0px; */
+	}
+	100% {
+		/* stroke-dasharray: 0px; */
+	}
+}
+@keyframes width {
+	0% {
+		stroke-width: 6.75px;
+		stroke-dashoffset: 49px;
+	}
+	50% {
+		stroke-width: 3px;
+	}
+	100% {
+		stroke-width: 6.75px;
+		stroke-dashoffset: 0px;
+	}
+}
+
+body {
+	background-color: black;
+	padding: 0;
+}
