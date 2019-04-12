@@ -1,0 +1,118 @@
+#drawPolyline__main-path {
+	stroke-width: 6.75px;
+	stroke: bisque;
+	/* fill: beige; */
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	
+	/* animation: dash 13.71s infinite alternate; */
+	stroke-dasharray: 49px;
+	animation: width 4s infinite linear;
+	/* animation: dash 16s infinite linear; */
+}
+#drawPolyline__main-extentions {
+	stroke-dasharray: 0.9px;
+	animation: dash 80s infinite linear;
+	/* cubic-bezier(.77,.21,.29,1.02); */
+}
+#drawPolyline__main-extentions_2 {
+	/* length = 4028 */
+	opacity: 1;
+	stroke-dasharray: 4028px;
+	stroke-dashOffset: 0px;
+
+	animation: fade 8s infinite;
+	animation: grow_to_4028 7.8s infinite cubic-bezier(.72,0,.84,1) alternate;
+}
+#drawPolyline__main-path_2 {
+	/* length = 44879px */
+	stroke-dasharray: 44879px;
+	stroke-dashOffset: 44879px;
+	
+	animation: grow 8s infinite cubic-bezier(.72,0,.84,1) alternate;
+}
+
+#drawPolyline__main-path_3 {
+	/* length = 13600 */
+	opacity: 1;
+	stroke-dasharray: 13600px;
+	stroke-dashOffset: 0px;
+	fill: black;
+
+	animation: fade 8s infinite;
+	animation: grow_to_13600 7.8s infinite cubic-bezier(.72,0,.84,1) alternate;
+}
+#drawPolyline__main-extentions_3 {
+	/* length = 175930 */
+	stroke-dasharray: 175930px;
+	stroke-dashOffset: 175930px;
+	
+	animation: grow 24s infinite cubic-bezier(.72,0,.84,1) alternate;
+}
+
+@keyframes fade {
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes grow {
+	95% {
+		stroke-dashOffset: 0px;
+	}
+	to {
+		stroke-dashOffset: 0px;
+	}
+}
+@keyframes grow_to_4028 {
+	
+	to {
+		stroke-dashOffset: 4028px;
+	}
+}
+@keyframes grow_13600 {
+	
+	to {
+		stroke-dashOffset: 13600px;
+	}
+}
+@keyframes grow_175930 {
+	
+	to {
+		stroke-dashOffset: 175930px;
+	}
+}
+
+@keyframes dash {
+	0% {
+		/* opacity: 0.1; */
+		/* stroke-dasharray: 49px; */
+		stroke-dashoffset: 56px;
+	}
+	90% {
+		/* opacity: 0.7; */
+		stroke-dashoffset: 0px;
+	}
+	91% {
+		/* stroke-dasharray: 0px; */
+	}
+	100% {
+		/* stroke-dasharray: 0px; */
+	}
+}
+@keyframes width {
+	0% {
+		stroke-width: 6.75px;
+	}
+	50% {
+		stroke-width: 3px;
+	}
+	100% {
+		stroke-width: 6.75px;
+	}
+}
+
+body {
+	background-color: black;
+	padding: 0;
+}
