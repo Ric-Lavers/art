@@ -17,27 +17,64 @@
 		svg {
 			width: 450px;height:450px;
 			stroke: lime;
-			fill: none;
+			fill: black;
+			fill-opacity: 0.6;
 			stroke-width: 2px;
 		}
 		body {
 			background-color: #122
 		}
+		#behind {
+			stroke: cyan;
+			fill: none;
+			stroke: black;
+		}
 	</style>
+	
 </head>
 <body>
 		<svg id="aeonKNight" viewBox="-200 -200 400 400">
-<!-- 	0,0     0,200  0,0    0,-200
-			0,0      -->			<polyline id="KN_poly" points= "
-	50,0   0,150 -50,0
-		0,-150  50,0   100,0  0,100
-		-100,0  0,-100 100,0  150,0
-		0,50   -150,0  0,-50  150,0"  
-													<!-- 200,0
-		0,0    -200,0  0,0    200,0`" -->
+				<defs>
+						<radialGradient id="grad1" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+							<stop offset="0%" style="stop-color:lime;stop-opacity:1" />
+							<stop offset="1%" style="stop-color:#fff;stop-opacity:1" />
+							<stop offset="10%" style="stop-color:rgb(0,0,0);stop-opacity:1" />
+							<stop offset="70%" style="stop-color:lime;stop-opacity:0.3" />
+							<stop offset="80%" style="stop-color:lime;stop-opacity:0.9" />
+							<stop offset="95%" style="stop-color:rgb(255,255,255);stop-opacity:0.8" />
+							<stop offset="100%" style="stop-color:lime;stop-opacity:0.7" />
+						</radialGradient>
+					</defs>
+
+		<ellipse stroke-width="0" cx="0" cy="0" rx="100" ry="100" fill="url(#grad1)" />
+<!-- <text id="i" x="0" y="0" fill="red">10</text> -->
+		<polyline id="behind" points="25,0  123.38,123.38  0,25  -123.38,123.38  -25,0  -123.38,-123.38  0,-25  123.38,-123.38  25,0  50,0  105.75,105.75  0,50  -105.75,105.75  -50,0  -105.75,-105.75  0,-50  105.75,-105.75  50,0  75,0  88.13,88.13  0,75  -88.13,88.13  -75,0  -88.13,-88.13  0,-75  88.13,-88.13  75,0  100,0  70.5,70.5  0,100  -70.5,70.5  -100,0  -70.5,-70.5  0,-100  70.5,-70.5  100,0  125,0  52.88,52.88  0,125  -52.88,52.88  -125,0  -52.88,-52.88  0,-125  52.88,-52.88  125,0  150,0  35.25,35.25  0,150  -35.25,35.25  -150,0  -35.25,-35.25  0,-150  35.25,-35.25  150,0  175,0  17.63,17.63  0,175  -17.63,17.63  -175,0  -17.63,-17.63  0,-175  17.63,-17.63  175,0 "
+		/>
+		<polyline id="KN_poly" points="25,0  123.38,123.38  0,25  -123.38,123.38  -25,0  -123.38,-123.38  0,-25  123.38,-123.38  25,0  50,0  105.75,105.75  0,50  -105.75,105.75  -50,0  -105.75,-105.75  0,-50  105.75,-105.75  50,0  75,0  88.13,88.13  0,75  -88.13,88.13  -75,0  -88.13,-88.13  0,-75  88.13,-88.13  75,0  100,0  70.5,70.5  0,100  -70.5,70.5  -100,0  -70.5,-70.5  0,-100  70.5,-70.5  100,0  125,0  52.88,52.88  0,125  -52.88,52.88  -125,0  -52.88,-52.88  0,-125  52.88,-52.88  125,0  150,0  35.25,35.25  0,150  -35.25,35.25  -150,0  -35.25,-35.25  0,-150  35.25,-35.25  150,0  175,0  17.63,17.63  0,175  -17.63,17.63  -175,0  -17.63,-17.63  0,-175  17.63,-17.63  175,0 "
 								 />
-								 <line x1="0"y1="0" x2="0"y2="200" />
 		</svg>
+
+		<input id="handleDuration" oninput="setDuration(this.value)"
+			style="width: 50%;"
+			type="range"
+			min="0" max="150"
+			value="5"
+			>
+		/>
+		<input id="ms" style="width: 130px;"
+			value="0"
+		/>
+		<script>
+			// document.getElementById('handleDuration').setAttribute('max', l)
+			
+			duration = {ms: document.getElementById('handleDuration'.value) }
+			function setDuration(event) {
+				duration.ms = event * 10
+				document.getElementById('ms').setAttribute('value', `${duration.ms}ms   ${duration.ms / 1000}s  ${(1/ (duration.ms / 1000)) * 60 |0}bpm`)
+			}
+		</script>
+
+
 		<script>aeonKNight = document.getElementById("aeonKNight")</script>
 		<script>
 			function appendStyle(createTextNode) {
@@ -56,22 +93,30 @@
 			p  = kn.points
 			l  = p.length
 			ptl = kn.getTotalLength()
+			
 			// void appendStyle(`svg { background-color: black; opacity: 0.6;stroke-dasharray: ${ptl}; stroke-dashoffset: ${ptl/l};}`)
 			function shift() {
 				np = Array.from(points[firstSymbol])
-				let wow = np.splice(i%l,l).concat(np).reduce((a,{x,y}) => a.concat([x,y]), [] )
+				let wow = np.splice(i%l-1,l).concat(np).reduce((a,{x,y}) => a.concat([x,y]), [] )
 
 				document.getElementById("KN_poly").setAttribute('points', wow.splice(0, (l*2)).toString())
 			}
 			
-
-
 			i = 0
 			spins=1 * l
-			duration = {ms: 500}
-			function up(fn){ if(i>=spins ){i=0} /* console.log(duration.ms); */ i++;  fn(); setTimeout(() => up(fn), duration.ms) }
+			function up(fn){ if(i>=spins ){i=0};/* document.getElementById('i').innerHTML = i;  *//* console.log(duration.ms); */ i++;  fn(); setTimeout(() => up(fn), duration.ms) }
 			up(shift)
 
 		</script>
 </body>
 </html>
+
+<!-- points="0,0  141,141  0,0  -141,141  0,0  -141,-141  0,0  141,-141  0,0  25,0  123.38,123.38  0,25  -123.38,123.38  -25,0  -123.38,-123.38  0,-25  123.38,-123.38  25,0  50,0  105.75,105.75  0,50  -105.75,105.75  -50,0  -105.75,-105.75  0,-50  105.75,-105.75  50,0  75,0  88.13,88.13  0,75  -88.13,88.13  -75,0  -88.13,-88.13  0,-75  88.13,-88.13  75,0  100,0  70.5,70.5  0,100  -70.5,70.5  -100,0  -70.5,-70.5  0,-100  70.5,-70.5  100,0  125,0  52.88,52.88  0,125  -52.88,52.88  -125,0  -52.88,-52.88  0,-125  52.88,-52.88  125,0  150,0  35.25,35.25  0,150  -35.25,35.25  -150,0  -35.25,-35.25  0,-150  35.25,-35.25  150,0  175,0  17.63,17.63  0,175  -17.63,17.63  -175,0  -17.63,-17.63  0,-175  17.63,-17.63  175,0" -->
+<!-- 
+points= "
+	50,0   0,150 -50,0
+		0,-150  50,0   100,0  0,100
+		-100,0  0,-100 100,0  150,0
+		0,50   -150,0  0,-50  150,0"  --> 
+													<!-- 200,0
+		0,0    -200,0  0,0    200,0`" -->
