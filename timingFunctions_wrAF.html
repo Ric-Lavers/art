@@ -10,7 +10,7 @@
 		var stop = false
 
 	</script>
-	<title>Art</title>
+	<title>Timê Fūnc't.ôn's _window.requestAnimationFrame ( ... )</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- <link rel="stylesheet" type="text/css" media="screen" href="main.css"> -->
 	<script src="main.js"></script>
@@ -138,6 +138,7 @@
 
 			}
 		</script>
+		<!-- this one works -->
 		<script>
 			pos = document.getElementById("pos")
 			p  = polys[firstSymbol].points
@@ -175,7 +176,9 @@
 					// cl( a )
 				}
 			}
-			
+/*
+ the shift function is Valid, but not relying on setTimeout over requestAnimationFrame is a unrefined method.
+*/
 			i = 0
 			spins=1 * l
 			function up(fn){ if(i>=spins )i=0;
@@ -198,7 +201,7 @@ effectTimingSwitch  */
 				})
 			}
 /*  */
-
+/*a step functions' saving grace is the exit method  */
 			function step(timestamp, options={dur: 2000, repeat: true}) {
 				
 				// cl(options)
@@ -210,30 +213,32 @@ effectTimingSwitch  */
 					// sP(aeonKNight)('transform', `rotate(${id%360}deg)`)
 				}
 				effectTimingSwitch([
-					{ frames: 16, cb:() => (i++,shift(firstSymbol)) },
-					// { frames: 1, cb:() => (i++,shift(secondSymbol)) },
+					// { frames: 16, cb:() => (i++,shift(firstSymbol)) },
+					{ frames: 100, cb:() => (i++,shift(secondSymbol)) },
 				], id)
 				// if(id%6==0)
 				// {
-				
+		/* shift(symbol) */
 				// (i++,shift())
 				
 				// // color=`rgb(${[id%126|0,id%256|0,id%126|0].join()})`
 				// // sP(aeonKNight)('stroke', color)
 
 				// }
+
+	/* The exit method */
 				if ((progress < options.dur || options.repeat) && stop!==true ) {
 					id = wrAF(t => step(t, options))
 				}else{cl('done');stop=true}
 				
 			}
-
+		/* The set up */
 			const withProps = props => () => {
 				wrAF(timestamp => step(timestamp, props))
 			}
-			// wrAF(step);
-
+			/* Execution */
 			withProps({dur: 10000, repeat: true})()
+			// wrAF(step); // withoutProps
 			
 		</script>
 </body>
@@ -248,3 +253,21 @@ points= "
 		0,50   -150,0  0,-50  150,0"  --> 
 													<!-- 200,0
 		0,0    -200,0  0,0    200,0`" -->
+
+
+1 frame is 16ms,
+
+unless it's not. 
+
+
+But its minimal value is 60 frames per second 1000ms/ 60ms === 16.66ms
+
+window.requestAnimationFrame
+Provides a method to capture the timestamp of each frame, and a way to identify each capture. 
+
+If you have ever seen the API waterfall column in a browsers developer tools, you may of noticed that the browser is capturing the amount of time (in milliseconds ) since the page loaded.
+
+performance.now()
+Returns the current amount of time (in microseconds) since the page loaded. 
+
+

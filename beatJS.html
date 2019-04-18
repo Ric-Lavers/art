@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+
+	<title>Beat JS</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" media="screen" href="main.css">
+  <script>
+  const trackTime = id => {
+    const [entry] = performance.getEntriesByName(id);
+    if (!entry) {
+      performance.mark(id);
+      return 0;
+    }
+    return performance.now() - entry.startTime;
+  };                                                                                                                                                       
+  const getProgress = ({duration, id}) => {
+    const progress = Math.min(trackTime(id) / duration, 1);
+    if (progress == 1) performance.clearMarks(id);
+    return progress;
+  };
+
+  const animation = {
+    duration: 5500,
+    id: requestAnimationFrame(tick)
+  };
+
+  const tick = () => {
+    const progress = getProgress(animation);
+    if (progress < 1) requestAnimationFrame(tick);
+  };
+  </script>
+</head>
+<body>
+
+  <div id="main" >
+
+  </div>
+
+  <script>
+    main = document.getElementById('main')
+
+
+
+  </script>
+	
+</body>
+</html>
