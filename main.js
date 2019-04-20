@@ -1,1 +1,2 @@
-/*  */
+/* Switch for animationsFrames */
+

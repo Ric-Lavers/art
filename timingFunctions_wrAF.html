@@ -213,8 +213,8 @@ effectTimingSwitch  */
 					// sP(aeonKNight)('transform', `rotate(${id%360}deg)`)
 				}
 				effectTimingSwitch([
-					// { frames: 16, cb:() => (i++,shift(firstSymbol)) },
-					{ frames: 100, cb:() => (i++,shift(secondSymbol)) },
+					{ frames: 16, cb:() => (i++,shift(firstSymbol)) },
+					// { frames: 6, cb:() => (i++,shift(secondSymbol)) },
 				], id)
 				// if(id%6==0)
 				// {
@@ -257,7 +257,7 @@ points= "
 
 1 frame is 16ms,
 
-unless it's not. 
+unless it's not.
 
 
 But its minimal value is 60 frames per second 1000ms/ 60ms === 16.66ms
@@ -271,3 +271,15 @@ performance.now()
 Returns the current amount of time (in microseconds) since the page loaded. 
 
 
+<script>
+	const bpmToMs = (bpm, options={decimals: 2}) => {
+		if (options.decimals > 14) {
+			console.warn('max decimals is 14')
+		}
+
+		let beatsPerMs = 60 / bpm * 1000
+		let decimalPlaces = 10**options.decimals
+
+		return Math.round(beatsPerMs * decimalPlaces) / decimalPlaces
+	}
+</script>
