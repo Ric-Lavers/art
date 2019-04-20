@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>scratch</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="main.css">
+  <!-- <script src="beat.js" ></script> -->
+  <script>
+    var count = 0;
+    var bpm = 70
+    var stop = false;
+    var wrAF = window.requestAnimationFrame
+    window['beatMark'] = '0'
+  </script>
+  <script>
+  const bpmToMs = (bpm, options={decimals: 2}) => {
+    if (options.decimals > 14) { console.warn('max decimals is 14')}
+    
+    let beatsPerMs = 60 / bpm * 1000
+    let decimalPlaces = 10**options.decimals
+
+    return Math.round(beatsPerMs * decimalPlaces) / decimalPlaces
+  }
+// 
+  let id=0;
+  let start=null;
+  let st = (timestamp, cb, options={dur: 2000}) => {
+    if(!start) start = timestamp;
+    let progress = timestamp - start;
+    cb(progress);
+    if(progress < options.dur){ id = window.requestAnimationFrame(t => st(t, cb, options)) }
+  }
+
+  //
+  const sixteenths = ["", "e", "&", "a"]
+  let phaseLen = 16
+  let currentValue = 0
+  let eanda = null
+  let onBpms = bpms => progress => {
+    // console.log(Math.round(progress) % Math.round(bpms))
+    let beat = progress / bpms
+
+
+    let nextValue = Math.round( progress / bpms ) + 1
+    if (nextValue <= phaseLen) { 
+      if (currentValue !== Math.round( progress / bpms ) + 1){
+        currentValue = nextValue
+      }
+      let sixteenth = beat === 0 ? 0 :Math.round( progress / (bpms / 4) + 1 ) % 4
+    
+      if ( eanda !== sixteenth ) {
+        // console.log(nextValue + sixteenths[sixteenth] )
+        window['beatMark'] = `${nextValue}${sixteenths[sixteenth]}`
+        eanda = sixteenth
+        return nextValue + sixteenths[sixteenth]
+      }
+    }
+  }
+
+  </script>
+  <script>
+    const handleChange = ({target: {id, value}}) => {
+      document.getElementById(id).value = value
+      bpm = value
+    }
+  </script>
+
+  <script>
+    /**
+     * Promise thrower
+     * options= { bpm: number, phaseLength }
+     */
+    const promiseThrower = (options={bpm}) => async (currentMark, mark, cb) => {
+      const sixteenthMs = bpmToMs(bpm) / 4
+      
+      findMarkTime = m => {
+        let [ q, s ] = m.split('')
+        let quarterNote = parseInt(q)
+        let sixteenthNote = s ? 0 : sixteenths.indexOf(s)
+        return (bpmToMs(bpm) * quarterNote + sixteenthMs * sixteenthNote )
+      }
+      let timeTilMark = findMarkTime(mark) - findMarkTime(currentMark)
+
+      
+      const promise1 = new Promise(function(resolve, reject) {
+        setTimeout(() => {
+          resolve(() => cb('here', timeTilMark))
+        }, timeTilMark);
+      });
+      if (currentMark === mark ) {
+        return promise1
+      }
+    }
+  </script>
+
+</head>
+<body>
+
+  <h1 style="color:white; text-align: center" id="heading" ></h1>
+  <h1 style="color:white; text-align: center" id="heading" ></h1>
+  <input id="bpm_input" type="number" value="140" onchange="handleChange(event)"></input>
+  
+
+  <script>
+    num = document.getElementById('heading')
+    num.innerText = count
+
+    let filter = async (progress) => {
+      let onBeat = onBpms(bpmToMs(bpm))(progress)
+
+      if ( onBeat ) {
+        beat = onBeat
+        num.innerText = beat
+        let abc = await promiseThrower({bpm: bpm})(beat, '3e', console.log)
+        if ( abc ) {
+          abc()
+        }
+      }
+    };
+    window.requestAnimationFrame(t => st(t, filter, {dur: (bpmToMs(bpm) * phaseLen)}))  
+
+
+
+    const promiseStep = (mark, cb) => new Promise((resolve, reject) => {
+      console.log( 'promiseStep' )
+      let step = () => {
+
+        if (window['beatMark'] === mark) {
+          cb(`_${mark}_`)
+          resolve()
+        }
+        if(window['beatMark'] !== mark || stop){
+          window.requestAnimationFrame(step)
+        }
+      }
+      window.requestAnimationFrame(step)
+    })
+
+    promiseStep('4a', console.log).then(function(cb) {
+      
+    })
+    
+  </script>
+</body>
+</html>
